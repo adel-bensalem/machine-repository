@@ -1,0 +1,7 @@
+{
+  "name": "machine-repository",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "adel1.bensalem <adel1.bensalem@epitech.eu>",
+  "license": "MIT"
+}
