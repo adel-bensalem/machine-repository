@@ -6,14 +6,17 @@
     "lib": ["esnext"],
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": false,
-    "declaration": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "./bin"
+    "outDir": "./dist",
+    "paths": {
+      "@core": ["./core/main.ts"],
+      "@types": ["./types/main.ts"]
+    }
   },
   "include": ["src"]
 }
