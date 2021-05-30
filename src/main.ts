@@ -22,13 +22,18 @@ const host = process.env.HOST_ADDRESS;
 const user = process.env.HOST_USER;
 const key = process.env.HOST_KEY;
 
-console.log(`mongodb://${dbUser}:${dbPassword}@${dbHost}/${dbName}`);
-
 const mongoClient = new MongoClient(
   `mongodb://${dbUser}:${dbPassword}@${dbHost}/${dbName}`,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 const ssh = new NodeSSH();
+const listenToExit = (cleanUp: () => void) => {
+  process.on("exit", cleanUp);
+  process.on("SIGINT", cleanUp);
+  process.on("SIGUSR1", cleanUp);
+  process.on("SIGUSR2", cleanUp);
+  process.on("uncaughtException", cleanUp);
+};
 
 ssh.connect({ host, username: user, privateKey: key }).then(() =>
   mongoClient.connect().then(() => {
@@ -47,17 +52,15 @@ ssh.connect({ host, username: user, privateKey: key }).then(() =>
     });
     app.use(router);
 
-    app.listen(port, () => console.log(`App listening on port ${port}`));
+    const server = app.listen(port, () =>
+      console.log(`App listening on port ${port}`)
+    );
+
+    listenToExit(() => server.close());
   })
 );
 
-const cleanUp = () => {
+listenToExit(() => {
   ssh.dispose();
   mongoClient.close(true);
-};
-
-process.on("exit", cleanUp);
-process.on("SIGINT", cleanUp);
-process.on("SIGUSR1", cleanUp);
-process.on("SIGUSR2", cleanUp);
-process.on("uncaughtException", cleanUp);
+});
