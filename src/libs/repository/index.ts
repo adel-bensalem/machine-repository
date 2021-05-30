@@ -1,28 +1,19 @@
+import { Db } from "mongodb";
+import { NodeSSH } from "node-ssh";
 import { Repository } from "./types";
-import { connectToHost } from "./ssh";
 
-const ansibleLocation =
-  process.env.ANSIBLE_LOCATION || "/etc/ansible/voltron-control-node";
-const repositoriesLocation =
-  process.env.REPOSITORIES_LOCATION || "/etc/ansible/voltron-control-node";
+const ansibleLocation = process.env.ANSIBLE_LOCATION;
 
-const createRepository = (): Repository => ({
+const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
   saveApplication: (application) =>
-    connectToHost().then((connection) =>
-      connection
-        .execCommand(
-          `ansible-playbook -i ${ansibleLocation}/inventory -e "application_name=${application.name}" ${ansibleLocation}/create-application.yml`
-        )
-        .then(() => application)
-        .finally(() => connection.dispose())
-    ),
+    ssh
+      .execCommand(
+        `ansible-playbook -i ${ansibleLocation}/inventory -e "application_name=${application.name}" ${ansibleLocation}/create-application.yml`
+      )
+      .then(() => db.collection("applications").insertOne(application))
+      .then(() => application),
   findApplication: (application) =>
-    connectToHost().then((connection) =>
-      connection
-        .execCommand(`[ -d ${repositoriesLocation}/${application.name}.git ]`)
-        .then(({ code }) => (code === 1 ? null : application))
-        .finally(() => connection.dispose())
-    ),
+    db.collection("applications").findOne({ name: { $eq: application.name } }),
 });
 
 export { createRepository };
