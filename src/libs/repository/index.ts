@@ -14,6 +14,7 @@ const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
       .then(() => application),
   findApplication: (application) =>
     db.collection("applications").findOne({ name: { $eq: application.name } }),
+  getApplications: () => db.collection("applications").find().toArray(),
 });
 
 export { createRepository };

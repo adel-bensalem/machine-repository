@@ -1,15 +1,13 @@
 ///<reference path="global.d.ts"/>
-import express from "express";
+import "./config";
+import express, { Response } from "express";
 import { MongoClient } from "mongodb";
 import { NodeSSH } from "node-ssh";
-import dotenv from "dotenv";
-
-dotenv.config();
-
 import { createCore } from "./core/main";
 import { createController } from "./controllers/main";
 import { createPresenter } from "./libs/presenter";
 import { createRepository } from "./libs/repository";
+import { createPortsMapper } from "./libs/portsMapper";
 import { router } from "./router/main";
 
 const app = express();
@@ -35,8 +33,21 @@ const listenToExit = (cleanUp: () => void) => {
   process.on("uncaughtException", cleanUp);
 };
 
-ssh.connect({ host, username: user, privateKey: key }).then(() =>
-  mongoClient.connect().then(() => {
+ssh
+  .connect({ host, username: user, privateKey: key })
+  .then(() => mongoClient.connect())
+  .then(() => {
+    const presenter = createPresenter({} as Response);
+    const core = createController(
+      createCore({
+        applicationRepository: createRepository(mongoClient.db(dbName), ssh),
+        presenter,
+        portsMapper: createPortsMapper(ssh),
+      }),
+      presenter
+    );
+
+    core.startApplications();
     app.use(express.json());
     app.use((req, res, next) => {
       const presenter = createPresenter(res);
@@ -44,10 +55,10 @@ ssh.connect({ host, username: user, privateKey: key }).then(() =>
         createCore({
           applicationRepository: createRepository(mongoClient.db(dbName), ssh),
           presenter,
+          portsMapper: createPortsMapper(ssh),
         }),
         presenter
       );
-
       next();
     });
     app.use(router);
@@ -57,8 +68,7 @@ ssh.connect({ host, username: user, privateKey: key }).then(() =>
     );
 
     listenToExit(() => server.close());
-  })
-);
+  });
 
 listenToExit(() => {
   ssh.dispose();
