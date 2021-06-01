@@ -8,7 +8,7 @@ const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
   saveApplication: (application) =>
     ssh
       .execCommand(
-        `ansible-playbook -i ${ansibleLocation}/inventory -e "application_name=${application.name}" ${ansibleLocation}/create-application.yml`
+        `ansible-playbook -i ${ansibleLocation}/inventory -e "application_name=${application.name} db_name=${process.env.DB_NAME} db_user=${process.env.DB_USER} db_password=${process.env.DB_PASSWORD}" ${ansibleLocation}/create-application.yml`
       )
       .then(() => db.collection("applications").insertOne(application))
       .then(() => application),
