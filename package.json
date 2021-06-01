@@ -2,7 +2,7 @@
   "name": "machine-repository",
   "version": "1.0.0",
   "main": "./dist/main.js",
-  "author": "adel1.bensalem <adel1.bensalem@epitech.eu>",
+  "author": "adel-bensalem <adel.bensalem@epitech.eu>",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
