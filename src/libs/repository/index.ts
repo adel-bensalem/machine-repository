@@ -21,7 +21,9 @@ const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
     new Promise((resolve, reject) =>
       axios
         .post(`${iamUrl}/users`, { name, password })
-        .then(({ data }) => resolve(data))
+        .then(({ data: { name, ...data } }) =>
+          resolve({ ...data, email: name })
+        )
         .catch((error) =>
           reject(
             !!error.response

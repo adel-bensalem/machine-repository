@@ -8,6 +8,7 @@ import { createController } from "./controllers/main";
 import { createPresenter } from "./libs/presenter";
 import { createRepository } from "./libs/repository";
 import { createPortsMapper } from "./libs/portsMapper";
+import { createKeysVault } from "./libs/keysVault";
 import { router } from "./router/main";
 
 const app = express();
@@ -37,8 +38,10 @@ ssh
   .connect({ host, username: user, privateKey: key })
   .then(() => mongoClient.connect())
   .then(() => {
+    const db = mongoClient.db(dbName);
     const presenter = createPresenter({} as Response);
-    const repository = createRepository(mongoClient.db(dbName), ssh);
+    const repository = createRepository(db, ssh);
+    const keysVault = createKeysVault(db, ssh);
     const portsMapper = createPortsMapper(ssh);
     const core = createController(
       createCore({
@@ -46,6 +49,7 @@ ssh
         userRepository: repository,
         presenter,
         portsMapper,
+        keysVault,
       }),
       presenter
     );
@@ -60,6 +64,7 @@ ssh
           userRepository: repository,
           presenter,
           portsMapper,
+          keysVault,
         }),
         presenter
       );

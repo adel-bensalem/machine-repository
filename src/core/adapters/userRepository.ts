@@ -1,7 +1,7 @@
-import { User } from "../../types/user";
+import { Identifiable, User } from "@types";
 
 interface UserRepository {
-  saveAccount(user: User): Promise<User>;
+  saveAccount(user: User): Promise<Identifiable<User>>;
 }
 
 export { UserRepository };

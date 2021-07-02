@@ -16,6 +16,7 @@ import { ApplicationCreationPresenter } from "./adapters/applicationCreationPres
 import { ApplicationsStartPresenter } from "./adapters/applicationsStartPresenter";
 import { RegistrationPresenter } from "./adapters/registrationPresenter";
 import { UserRepository } from "./adapters/userRepository";
+import { KeysVault } from "./adapters/keysVault";
 
 interface Presenter
   extends ApplicationCreationPresenter,
@@ -27,6 +28,7 @@ type Dependencies = {
   userRepository: UserRepository;
   presenter: Presenter;
   portsMapper: PortsMapper;
+  keysVault: KeysVault;
 };
 
 type Core = {
@@ -47,6 +49,7 @@ const createCore = (dependencies: Dependencies): Core => ({
   ),
   register: createRegistrationInteractor(
     dependencies.userRepository,
+    dependencies.keysVault,
     dependencies.presenter
   ),
 });
@@ -59,4 +62,5 @@ export {
   UserRepository,
   Presenter,
   PortsMapper,
+  KeysVault,
 };
