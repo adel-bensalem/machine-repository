@@ -8,15 +8,23 @@ import {
   ApplicationsStartInteractor,
   createApplicationsStartInteractor,
 } from "./useCases/startApplications";
+import {
+  RegistrationInteractor,
+  createRegistrationInteractor,
+} from "./useCases/register";
 import { ApplicationCreationPresenter } from "./adapters/applicationCreationPresenter";
 import { ApplicationsStartPresenter } from "./adapters/applicationsStartPresenter";
+import { RegistrationPresenter } from "./adapters/registrationPresenter";
+import { UserRepository } from "./adapters/userRepository";
 
 interface Presenter
   extends ApplicationCreationPresenter,
+    RegistrationPresenter,
     ApplicationsStartPresenter {}
 
 type Dependencies = {
   applicationRepository: ApplicationRepository;
+  userRepository: UserRepository;
   presenter: Presenter;
   portsMapper: PortsMapper;
 };
@@ -24,6 +32,7 @@ type Dependencies = {
 type Core = {
   createApplication: ApplicationCreationInteractor;
   startApplications: ApplicationsStartInteractor;
+  register: RegistrationInteractor;
 };
 
 const createCore = (dependencies: Dependencies): Core => ({
@@ -36,6 +45,10 @@ const createCore = (dependencies: Dependencies): Core => ({
     dependencies.portsMapper,
     dependencies.presenter
   ),
+  register: createRegistrationInteractor(
+    dependencies.userRepository,
+    dependencies.presenter
+  ),
 });
 
 export {
@@ -43,6 +56,7 @@ export {
   Core,
   Dependencies,
   ApplicationRepository,
+  UserRepository,
   Presenter,
   PortsMapper,
 };
