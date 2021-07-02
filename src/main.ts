@@ -38,11 +38,14 @@ ssh
   .then(() => mongoClient.connect())
   .then(() => {
     const presenter = createPresenter({} as Response);
+    const repository = createRepository(mongoClient.db(dbName), ssh);
+    const portsMapper = createPortsMapper(ssh);
     const core = createController(
       createCore({
-        applicationRepository: createRepository(mongoClient.db(dbName), ssh),
+        applicationRepository: repository,
+        userRepository: repository,
         presenter,
-        portsMapper: createPortsMapper(ssh),
+        portsMapper,
       }),
       presenter
     );
@@ -53,9 +56,10 @@ ssh
       const presenter = createPresenter(res);
       req.core = createController(
         createCore({
-          applicationRepository: createRepository(mongoClient.db(dbName), ssh),
+          applicationRepository: repository,
+          userRepository: repository,
           presenter,
-          portsMapper: createPortsMapper(ssh),
+          portsMapper,
         }),
         presenter
       );
