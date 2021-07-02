@@ -12,15 +12,21 @@ import {
   RegistrationInteractor,
   createRegistrationInteractor,
 } from "./useCases/register";
+import {
+  AuthenticationInteractor,
+  createAuthenticationInteractor,
+} from "./useCases/authenticate";
 import { ApplicationCreationPresenter } from "./adapters/applicationCreationPresenter";
 import { ApplicationsStartPresenter } from "./adapters/applicationsStartPresenter";
 import { RegistrationPresenter } from "./adapters/registrationPresenter";
 import { UserRepository } from "./adapters/userRepository";
+import { AuthenticationPresenter } from "./adapters/authenticationPresenter";
 import { KeysVault } from "./adapters/keysVault";
 
 interface Presenter
   extends ApplicationCreationPresenter,
     RegistrationPresenter,
+    AuthenticationPresenter,
     ApplicationsStartPresenter {}
 
 type Dependencies = {
@@ -35,6 +41,7 @@ type Core = {
   createApplication: ApplicationCreationInteractor;
   startApplications: ApplicationsStartInteractor;
   register: RegistrationInteractor;
+  authenticate: AuthenticationInteractor;
 };
 
 const createCore = (dependencies: Dependencies): Core => ({
@@ -48,6 +55,11 @@ const createCore = (dependencies: Dependencies): Core => ({
     dependencies.presenter
   ),
   register: createRegistrationInteractor(
+    dependencies.userRepository,
+    dependencies.keysVault,
+    dependencies.presenter
+  ),
+  authenticate: createAuthenticationInteractor(
     dependencies.userRepository,
     dependencies.keysVault,
     dependencies.presenter

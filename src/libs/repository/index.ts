@@ -1,3 +1,4 @@
+import { User } from "@types";
 import { Db } from "mongodb";
 import { NodeSSH } from "node-ssh";
 import axios from "axios";
@@ -21,6 +22,28 @@ const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
     new Promise((resolve, reject) =>
       axios
         .post(`${iamUrl}/users`, { name, password })
+        .then(({ data: { name, ...data } }) =>
+          resolve({ ...data, email: name })
+        )
+        .catch((error) =>
+          reject(
+            !!error.response
+              ? error.response.data
+              : !!error.request
+              ? error.request
+              : error
+          )
+        )
+    ),
+  findUser: ({ email: name, password }): Promise<User> =>
+    new Promise((resolve, reject) =>
+      axios
+        .get(`${iamUrl}/users`, { params: { name, password } })
+        .then(({ data }) =>
+          axios.get(`${iamUrl}/users`, {
+            headers: { Authorization: `Bearer ${data.token}` },
+          })
+        )
         .then(({ data: { name, ...data } }) =>
           resolve({ ...data, email: name })
         )

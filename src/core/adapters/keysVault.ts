@@ -1,7 +1,8 @@
-import { Identifiable, User } from "@types";
+import { User } from "@types";
 
 interface KeysVault {
-  createKey(user: Identifiable<User>): Promise<string>;
+  createKey(user: User): Promise<string>;
+  retrieveKey(user: User): Promise<string>;
 }
 
 export { KeysVault };

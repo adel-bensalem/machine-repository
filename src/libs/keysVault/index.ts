@@ -17,6 +17,15 @@ function createKeysVault(db: Db, ssh: NodeSSH): KeysVault {
             .then(() => key)
         );
     },
+    retrieveKey(user): Promise<string> {
+      return new Promise((resolve, reject) =>
+        db
+          .collection("keys")
+          .findOne({ "owner.email": { $eq: user.email } })
+          .then((key) => (key ? resolve(key) : reject()))
+          .catch(reject)
+      );
+    },
   };
 }
 
