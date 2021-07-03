@@ -1,17 +1,25 @@
-import { Application, ApplicationCreationError } from "@types";
+import {
+  Application,
+  ApplicationCreationError,
+  Identifiable,
+  User,
+} from "@types";
 import { ApplicationRepository } from "../adapters/applicationRepository";
 import { ApplicationCreationPresenter } from "../adapters/applicationCreationPresenter";
 import { isApplicationValid } from "../entities/applicationValidator";
 import { findError } from "../entities/errorChecker";
 
-type ApplicationCreationInteractor = (application: Application) => void;
+type ApplicationCreationInteractor = (
+  application: Application,
+  user: Identifiable<User>
+) => void;
 
 const createApplicationCreationInteractor =
   (
     repository: ApplicationRepository,
     presenter: ApplicationCreationPresenter
   ): ApplicationCreationInteractor =>
-  (application) => {
+  (application, user) => {
     const error: ApplicationCreationError = {
       doesApplicationExists: false,
       hasUnExpectedError: false,
@@ -24,7 +32,7 @@ const createApplicationCreationInteractor =
           .then((app) =>
             !app
               ? repository
-                  .saveApplication(application)
+                  .saveApplication(application, user)
                   .then(() =>
                     presenter.presentApplicationCreationSuccess(application)
                   )

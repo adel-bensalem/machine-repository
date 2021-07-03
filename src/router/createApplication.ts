@@ -1,5 +1,10 @@
 import { Router } from "express";
 
-export const applicationCreationRouter = Router().post("/applications", (req) =>
-  req.core.createApplication(req.body)
+export const applicationCreationRouter = Router().post(
+  "/applications",
+  (req) => {
+    const data = req.body || {};
+
+    req.core.createApplication(data.application, data.user);
+  }
 );

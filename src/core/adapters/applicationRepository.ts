@@ -1,8 +1,11 @@
-import { Application } from "@types";
+import { Application, Identifiable, User } from "@types";
 
 interface ApplicationRepository {
   findApplication(application: Application): Promise<Application | null>;
-  saveApplication(application: Application): Promise<Application>;
+  saveApplication(
+    application: Application,
+    user: Identifiable<User>
+  ): Promise<Application>;
   getApplications(): Promise<Application[]>;
 }
 

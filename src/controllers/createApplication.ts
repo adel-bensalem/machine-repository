@@ -4,9 +4,9 @@ import { validateApplication } from "./validators/applicationValidator";
 
 const createApplicationCreationController =
   (core: Core, presenter: Presenter): ApplicationCreationInteractor =>
-  (application) =>
+  (application, user) =>
     validateApplication(application)
-      ? core.createApplication(application)
+      ? core.createApplication(application, user)
       : presenter.presentApplicationCreationFailure(
           {
             isApplicationInvalid: true,
