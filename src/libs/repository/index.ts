@@ -1,4 +1,4 @@
-import { User } from "@types";
+import { Identifiable, User } from "@types";
 import { Db } from "mongodb";
 import { NodeSSH } from "node-ssh";
 import axios from "axios";
@@ -35,7 +35,7 @@ const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
           )
         )
     ),
-  findUser: ({ email: name, password }): Promise<User> =>
+  findUser: ({ email: name, password }): Promise<Identifiable<User>> =>
     new Promise((resolve, reject) =>
       axios
         .get(`${iamUrl}/users`, { params: { name, password } })

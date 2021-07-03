@@ -9,8 +9,8 @@ const createPresenter = (response: Response): Presenter => ({
       )
       .send(error);
   },
-  presentAuthenticationSuccess(key) {
-    response.status(200).send(key);
+  presentAuthenticationSuccess(key, user) {
+    response.status(200).send({ key, user });
   },
   presentApplicationCreationSuccess: (app) => response.status(200).send(app),
   presentApplicationCreationFailure: (error) =>

@@ -14,8 +14,12 @@ const createAuthenticationInteractor =
   (credentials) =>
     repository
       .findUser(credentials)
-      .then(keysVault.retrieveKey)
-      .then(presenter.presentAuthenticationSuccess)
+      .then((user) =>
+        keysVault.retrieveKey(user).then((key) => ({ key, user }))
+      )
+      .then(({ key, user }) =>
+        presenter.presentAuthenticationSuccess(key, user)
+      )
       .catch((error) =>
         presenter.presentAuthenticationFailure({
           areCredentialsInvalid: false,

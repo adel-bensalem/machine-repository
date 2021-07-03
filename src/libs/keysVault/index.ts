@@ -22,7 +22,7 @@ function createKeysVault(db: Db, ssh: NodeSSH): KeysVault {
         db
           .collection("keys")
           .findOne({ "owner.email": { $eq: user.email } })
-          .then((key) => (key ? resolve(key) : reject()))
+          .then((res) => (res ? resolve(res.key) : reject()))
           .catch(reject)
       );
     },

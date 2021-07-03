@@ -1,7 +1,7 @@
-import { AuthenticationError } from "@types";
+import { AuthenticationError, Identifiable, User } from "@types";
 
 interface AuthenticationPresenter {
-  presentAuthenticationSuccess(key: string): void;
+  presentAuthenticationSuccess(key: string, user: Identifiable<User>): void;
   presentAuthenticationFailure(error: AuthenticationError): void;
 }
 
