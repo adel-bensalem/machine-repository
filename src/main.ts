@@ -41,7 +41,7 @@ ssh
     const db = mongoClient.db(dbName);
     const presenter = createPresenter({} as Response);
     const repository = createRepository(db, ssh);
-    const keysVault = createKeysVault(db, ssh);
+    const keysVault = createKeysVault(ssh);
     const portsMapper = createPortsMapper(ssh);
     const core = createController(
       createCore({
