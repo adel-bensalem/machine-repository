@@ -6,3 +6,5 @@ export * from "./id";
 export * from "./identifiable";
 export * from "./credentials";
 export * from "./authenticationError";
+export * from "./applicationsRetrievalFilter";
+export * from "./applicationsRetrievalError";

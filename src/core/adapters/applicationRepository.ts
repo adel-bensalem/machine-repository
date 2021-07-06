@@ -1,4 +1,10 @@
-import { Application, Identifiable, User } from "@types";
+import {
+  Application,
+  ApplicationsRetrievalFilter,
+  Id,
+  Identifiable,
+  User,
+} from "@types";
 
 interface ApplicationRepository {
   findApplication(application: Application): Promise<Application | null>;
@@ -7,6 +13,10 @@ interface ApplicationRepository {
     user: Identifiable<User>
   ): Promise<Application>;
   getApplications(): Promise<Application[]>;
+  getUserApplications(
+    userId: Id,
+    filter: ApplicationsRetrievalFilter
+  ): Promise<Identifiable<Application>[]>;
 }
 
 export { ApplicationRepository };
