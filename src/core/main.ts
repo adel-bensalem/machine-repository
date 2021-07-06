@@ -1,5 +1,12 @@
 import { ApplicationRepository } from "./adapters/applicationRepository";
 import { PortsMapper } from "./adapters/portsMapper";
+import { ApplicationCreationPresenter } from "./adapters/applicationCreationPresenter";
+import { ApplicationsStartPresenter } from "./adapters/applicationsStartPresenter";
+import { RegistrationPresenter } from "./adapters/registrationPresenter";
+import { UserRepository } from "./adapters/userRepository";
+import { AuthenticationPresenter } from "./adapters/authenticationPresenter";
+import { ApplicationsRetrievalPresenter } from "./adapters/applicationsRetrievalPresenter";
+import { KeysVault } from "./adapters/keysVault";
 import {
   ApplicationCreationInteractor,
   createApplicationCreationInteractor,
@@ -16,17 +23,16 @@ import {
   AuthenticationInteractor,
   createAuthenticationInteractor,
 } from "./useCases/authenticate";
-import { ApplicationCreationPresenter } from "./adapters/applicationCreationPresenter";
-import { ApplicationsStartPresenter } from "./adapters/applicationsStartPresenter";
-import { RegistrationPresenter } from "./adapters/registrationPresenter";
-import { UserRepository } from "./adapters/userRepository";
-import { AuthenticationPresenter } from "./adapters/authenticationPresenter";
-import { KeysVault } from "./adapters/keysVault";
+import {
+  ApplicationsRetrievalInteractor,
+  createApplicationsRetrievalInteractor,
+} from "./useCases/retrieveApplications";
 
 interface Presenter
   extends ApplicationCreationPresenter,
     RegistrationPresenter,
     AuthenticationPresenter,
+    ApplicationsRetrievalPresenter,
     ApplicationsStartPresenter {}
 
 type Dependencies = {
@@ -42,6 +48,7 @@ type Core = {
   startApplications: ApplicationsStartInteractor;
   register: RegistrationInteractor;
   authenticate: AuthenticationInteractor;
+  retrieveApplications: ApplicationsRetrievalInteractor;
 };
 
 const createCore = (dependencies: Dependencies): Core => ({
@@ -62,6 +69,10 @@ const createCore = (dependencies: Dependencies): Core => ({
   authenticate: createAuthenticationInteractor(
     dependencies.userRepository,
     dependencies.keysVault,
+    dependencies.presenter
+  ),
+  retrieveApplications: createApplicationsRetrievalInteractor(
+    dependencies.applicationRepository,
     dependencies.presenter
   ),
 });

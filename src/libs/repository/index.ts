@@ -6,6 +6,7 @@ import { findApplication } from "./findApplication";
 import { getApplications } from "./getApplications";
 import { saveAccount } from "./saveAccount";
 import { findUser } from "./findUser";
+import { getUserApplications } from "./getUserApplications";
 
 const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
   saveApplication: saveApplication(db, ssh),
@@ -13,6 +14,7 @@ const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
   getApplications: getApplications(db),
   saveAccount: saveAccount(),
   findUser: findUser(),
+  getUserApplications: getUserApplications(),
 });
 
 export { createRepository };
