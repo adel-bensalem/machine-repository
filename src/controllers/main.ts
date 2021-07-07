@@ -10,6 +10,7 @@ const createController = (core: Core, presenter: Presenter): Core => ({
   authenticate: createAuthenticationController(core, presenter),
   startApplications: core.startApplications,
   retrieveApplications: createApplicationsRetrievalController(core, presenter),
+  retrieveApplicationLogs: core.retrieveApplicationLogs,
 });
 
 export { createController };
