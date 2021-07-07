@@ -10,7 +10,7 @@ import { getUserApplications } from "./getUserApplications";
 
 const createRepository = (db: Db, ssh: NodeSSH): Repository => ({
   saveApplication: saveApplication(db, ssh),
-  findApplication: findApplication(db, ssh),
+  findApplication: findApplication(db),
   getApplications: getApplications(db),
   saveAccount: saveAccount(),
   findUser: findUser(),

@@ -12,6 +12,7 @@ import { createKeysVault } from "./libs/keysVault";
 import { createApplicationDock } from "./libs/applicationDock";
 import { createLogsCollector } from "./libs/logsCollector";
 import { createSafeGuard } from "./libs/safeGuard";
+import { createDeploymentLog } from "./libs/deploymentLog";
 import { router } from "./router/main";
 
 const app = express();
@@ -49,6 +50,7 @@ ssh
     const applicationDock = createApplicationDock(ssh);
     const logsCollector = createLogsCollector(ssh);
     const safeGuard = createSafeGuard();
+    const deploymentLog = createDeploymentLog(db);
     const core = createController(
       createCore({
         applicationRepository: repository,
@@ -59,6 +61,7 @@ ssh
         applicationDock,
         logsCollector,
         safeGuard,
+        deploymentLog,
       }),
       presenter
     );
@@ -77,6 +80,7 @@ ssh
           applicationDock,
           logsCollector,
           safeGuard,
+          deploymentLog,
         }),
         presenter
       );

@@ -11,6 +11,7 @@ const createController = (core: Core, presenter: Presenter): Core => ({
   startApplications: core.startApplications,
   retrieveApplications: createApplicationsRetrievalController(core, presenter),
   retrieveApplicationLogs: core.retrieveApplicationLogs,
+  createDeployment: core.createDeployment,
 });
 
 export { createController };
