@@ -9,3 +9,5 @@ export * from "./authenticationError";
 export * from "./applicationsRetrievalFilter";
 export * from "./applicationsRetrievalError";
 export * from "./applicationLogsRetrievalError";
+export * from "./deployment";
+export * from "./deploymentCreationError";

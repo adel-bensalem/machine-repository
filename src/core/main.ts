@@ -7,10 +7,12 @@ import { UserRepository } from "./adapters/userRepository";
 import { AuthenticationPresenter } from "./adapters/authenticationPresenter";
 import { ApplicationsRetrievalPresenter } from "./adapters/applicationsRetrievalPresenter";
 import { ApplicationLogsRetrievalPresenter } from "./adapters/applicationLogsRetrievalPresenter";
+import { DeploymentCreationPresenter } from "./adapters/deploymentCreationPresenter";
 import { KeysVault } from "./adapters/keysVault";
 import { LogsCollector } from "./adapters/logsCollector";
 import { ApplicationDock } from "./adapters/applicationDock";
 import { SafeGuard } from "./adapters/safeGuard";
+import { DeploymentLog } from "./adapters/deploymentLog";
 import {
   ApplicationCreationInteractor,
   createApplicationCreationInteractor,
@@ -35,6 +37,10 @@ import {
   ApplicationLogsRetrievalInteractor,
   createApplicationLogsRetrievalInteractor,
 } from "./useCases/retrieveApplicationLogs";
+import {
+  DeploymentCreationInteractor,
+  createDeploymentCreationInteractor,
+} from "./useCases/createDeployment";
 
 interface Presenter
   extends ApplicationCreationPresenter,
@@ -42,6 +48,7 @@ interface Presenter
     AuthenticationPresenter,
     ApplicationsRetrievalPresenter,
     ApplicationLogsRetrievalPresenter,
+    DeploymentCreationPresenter,
     ApplicationsStartPresenter {}
 
 type Dependencies = {
@@ -53,6 +60,7 @@ type Dependencies = {
   logsCollector: LogsCollector;
   applicationDock: ApplicationDock;
   safeGuard: SafeGuard;
+  deploymentLog: DeploymentLog;
 };
 
 type Core = {
@@ -62,6 +70,7 @@ type Core = {
   authenticate: AuthenticationInteractor;
   retrieveApplications: ApplicationsRetrievalInteractor;
   retrieveApplicationLogs: ApplicationLogsRetrievalInteractor;
+  createDeployment: DeploymentCreationInteractor;
 };
 
 const createCore = (dependencies: Dependencies): Core => ({
@@ -95,6 +104,11 @@ const createCore = (dependencies: Dependencies): Core => ({
     dependencies.applicationRepository,
     dependencies.presenter
   ),
+  createDeployment: createDeploymentCreationInteractor(
+    dependencies.applicationRepository,
+    dependencies.deploymentLog,
+    dependencies.presenter
+  ),
 });
 
 export {
@@ -109,4 +123,5 @@ export {
   LogsCollector,
   ApplicationDock,
   SafeGuard,
+  DeploymentLog,
 };
