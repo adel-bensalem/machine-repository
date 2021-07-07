@@ -7,7 +7,9 @@ import {
 } from "@types";
 
 interface ApplicationRepository {
-  findApplication(application: Application): Promise<Application | null>;
+  findApplication(
+    application: Application
+  ): Promise<Identifiable<Application> | null>;
   saveApplication(
     application: Application,
     user: Identifiable<User>

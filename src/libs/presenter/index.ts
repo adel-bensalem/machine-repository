@@ -2,6 +2,20 @@ import { Response } from "express";
 import { Presenter } from "@core";
 
 const createPresenter = (response: Response): Presenter => ({
+  presentApplicationLogsRetrievalSuccess(logs) {
+    response.status(200).send(logs);
+  },
+  presentApplicationLogsRetrievalFailure(error) {
+    response
+      .status(
+        error.wasApplicationNotFound
+          ? 404
+          : error.isApplicationNotRunning
+          ? 403
+          : 404
+      )
+      .send(error);
+  },
   presentApplicationsRetrievalFailure(error): void {
     response.status(error.wasUserNotFound ? 404 : 500).send(error);
   },

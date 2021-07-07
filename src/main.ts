@@ -9,6 +9,8 @@ import { createPresenter } from "./libs/presenter";
 import { createRepository } from "./libs/repository";
 import { createPortsMapper } from "./libs/portsMapper";
 import { createKeysVault } from "./libs/keysVault";
+import { createApplicationDock } from "./libs/applicationDock";
+import { createLogsCollector } from "./libs/logsCollector";
 import { router } from "./router/main";
 
 const app = express();
@@ -43,6 +45,8 @@ ssh
     const repository = createRepository(db, ssh);
     const keysVault = createKeysVault(ssh);
     const portsMapper = createPortsMapper(ssh);
+    const applicationDock = createApplicationDock(ssh);
+    const logsCollector = createLogsCollector(ssh);
     const core = createController(
       createCore({
         applicationRepository: repository,
@@ -50,6 +54,8 @@ ssh
         presenter,
         portsMapper,
         keysVault,
+        applicationDock,
+        logsCollector,
       }),
       presenter
     );
@@ -65,6 +71,8 @@ ssh
           presenter,
           portsMapper,
           keysVault,
+          applicationDock,
+          logsCollector,
         }),
         presenter
       );

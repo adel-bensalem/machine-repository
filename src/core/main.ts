@@ -6,7 +6,10 @@ import { RegistrationPresenter } from "./adapters/registrationPresenter";
 import { UserRepository } from "./adapters/userRepository";
 import { AuthenticationPresenter } from "./adapters/authenticationPresenter";
 import { ApplicationsRetrievalPresenter } from "./adapters/applicationsRetrievalPresenter";
+import { ApplicationLogsRetrievalPresenter } from "./adapters/applicationLogsRetrievalPresenter";
 import { KeysVault } from "./adapters/keysVault";
+import { LogsCollector } from "./adapters/logsCollector";
+import { ApplicationDock } from "./adapters/applicationDock";
 import {
   ApplicationCreationInteractor,
   createApplicationCreationInteractor,
@@ -27,12 +30,17 @@ import {
   ApplicationsRetrievalInteractor,
   createApplicationsRetrievalInteractor,
 } from "./useCases/retrieveApplications";
+import {
+  ApplicationLogsRetrievalInteractor,
+  createApplicationLogsRetrievalInteractor,
+} from "./useCases/retrieveApplicationLogs";
 
 interface Presenter
   extends ApplicationCreationPresenter,
     RegistrationPresenter,
     AuthenticationPresenter,
     ApplicationsRetrievalPresenter,
+    ApplicationLogsRetrievalPresenter,
     ApplicationsStartPresenter {}
 
 type Dependencies = {
@@ -41,6 +49,8 @@ type Dependencies = {
   presenter: Presenter;
   portsMapper: PortsMapper;
   keysVault: KeysVault;
+  logsCollector: LogsCollector;
+  applicationDock: ApplicationDock;
 };
 
 type Core = {
@@ -49,6 +59,7 @@ type Core = {
   register: RegistrationInteractor;
   authenticate: AuthenticationInteractor;
   retrieveApplications: ApplicationsRetrievalInteractor;
+  retrieveApplicationLogs: ApplicationLogsRetrievalInteractor;
 };
 
 const createCore = (dependencies: Dependencies): Core => ({
@@ -75,6 +86,12 @@ const createCore = (dependencies: Dependencies): Core => ({
     dependencies.applicationRepository,
     dependencies.presenter
   ),
+  retrieveApplicationLogs: createApplicationLogsRetrievalInteractor(
+    dependencies.logsCollector,
+    dependencies.applicationDock,
+    dependencies.applicationRepository,
+    dependencies.presenter
+  ),
 });
 
 export {
@@ -86,4 +103,6 @@ export {
   Presenter,
   PortsMapper,
   KeysVault,
+  LogsCollector,
+  ApplicationDock,
 };
