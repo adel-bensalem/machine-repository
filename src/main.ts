@@ -11,6 +11,7 @@ import { createPortsMapper } from "./libs/portsMapper";
 import { createKeysVault } from "./libs/keysVault";
 import { createApplicationDock } from "./libs/applicationDock";
 import { createLogsCollector } from "./libs/logsCollector";
+import { createSafeGuard } from "./libs/safeGuard";
 import { router } from "./router/main";
 
 const app = express();
@@ -47,6 +48,7 @@ ssh
     const portsMapper = createPortsMapper(ssh);
     const applicationDock = createApplicationDock(ssh);
     const logsCollector = createLogsCollector(ssh);
+    const safeGuard = createSafeGuard();
     const core = createController(
       createCore({
         applicationRepository: repository,
@@ -56,6 +58,7 @@ ssh
         keysVault,
         applicationDock,
         logsCollector,
+        safeGuard,
       }),
       presenter
     );
@@ -73,6 +76,7 @@ ssh
           keysVault,
           applicationDock,
           logsCollector,
+          safeGuard,
         }),
         presenter
       );

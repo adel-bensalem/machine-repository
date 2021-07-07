@@ -1,6 +1,6 @@
 import { Router } from "express";
 
 export const applicationLogsRetrievalRouter = Router().get(
-  "/applications/:name/logs",
-  (req) => req.core.retrieveApplicationLogs(req.params.name)
+  "/users/:userId/applications/:name/logs",
+  (req) => req.core.retrieveApplicationLogs(req.params.userId, req.params.name)
 );

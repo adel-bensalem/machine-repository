@@ -10,6 +10,7 @@ import { ApplicationLogsRetrievalPresenter } from "./adapters/applicationLogsRet
 import { KeysVault } from "./adapters/keysVault";
 import { LogsCollector } from "./adapters/logsCollector";
 import { ApplicationDock } from "./adapters/applicationDock";
+import { SafeGuard } from "./adapters/safeGuard";
 import {
   ApplicationCreationInteractor,
   createApplicationCreationInteractor,
@@ -51,6 +52,7 @@ type Dependencies = {
   keysVault: KeysVault;
   logsCollector: LogsCollector;
   applicationDock: ApplicationDock;
+  safeGuard: SafeGuard;
 };
 
 type Core = {
@@ -89,6 +91,7 @@ const createCore = (dependencies: Dependencies): Core => ({
   retrieveApplicationLogs: createApplicationLogsRetrievalInteractor(
     dependencies.logsCollector,
     dependencies.applicationDock,
+    dependencies.safeGuard,
     dependencies.applicationRepository,
     dependencies.presenter
   ),
@@ -105,4 +108,5 @@ export {
   KeysVault,
   LogsCollector,
   ApplicationDock,
+  SafeGuard,
 };
