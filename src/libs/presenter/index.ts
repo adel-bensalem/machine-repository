@@ -16,9 +16,23 @@ const createPresenter = (response: Response): Presenter => ({
       .status(
         error.wasApplicationNotFound
           ? 404
-          : error.isApplicationNotRunning
+          : error.isApplicationNotRunning || error.wasPermissionDenied
           ? 403
-          : 404
+          : 500
+      )
+      .send(error);
+  },
+  presentApplicationDeploymentsRetrievalSuccess(deployments) {
+    response.status(200).send(deployments);
+  },
+  presentApplicationDeploymentsRetrievalFailure(error) {
+    response
+      .status(
+        error.wasApplicationNotFound
+          ? 404
+          : error.wasApplicationNotFound
+          ? 403
+          : 500
       )
       .send(error);
   },
