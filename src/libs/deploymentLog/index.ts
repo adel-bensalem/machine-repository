@@ -18,6 +18,17 @@ const createDeploymentLog = (db: Db): DeploymentLog => ({
         ...deployment,
         id: insertedId,
       })),
+  retrieveDeployments: ({ name }) =>
+    db
+      .collection("deployments")
+      .find({ "application.name": { $eq: name } })
+      .toArray()
+      .then((deployments) =>
+        deployments.map(({ _id, ...deployments }) => ({
+          ...deployments,
+          id: _id,
+        }))
+      ),
 });
 
 export { createDeploymentLog };

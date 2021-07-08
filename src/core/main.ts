@@ -8,6 +8,7 @@ import { AuthenticationPresenter } from "./adapters/authenticationPresenter";
 import { ApplicationsRetrievalPresenter } from "./adapters/applicationsRetrievalPresenter";
 import { ApplicationLogsRetrievalPresenter } from "./adapters/applicationLogsRetrievalPresenter";
 import { DeploymentCreationPresenter } from "./adapters/deploymentCreationPresenter";
+import { ApplicationDeploymentsRetrievalPresenter } from "./adapters/applicationDeploymentsRetrievalPresenter";
 import { KeysVault } from "./adapters/keysVault";
 import { LogsCollector } from "./adapters/logsCollector";
 import { ApplicationDock } from "./adapters/applicationDock";
@@ -41,6 +42,10 @@ import {
   DeploymentCreationInteractor,
   createDeploymentCreationInteractor,
 } from "./useCases/createDeployment";
+import {
+  ApplicationDeploymentsRetrievalInteractor,
+  createApplicationDeploymentsRetrievalInteractor,
+} from "./useCases/retrieveApplicationDeployments";
 
 interface Presenter
   extends ApplicationCreationPresenter,
@@ -48,6 +53,7 @@ interface Presenter
     AuthenticationPresenter,
     ApplicationsRetrievalPresenter,
     ApplicationLogsRetrievalPresenter,
+    ApplicationDeploymentsRetrievalPresenter,
     DeploymentCreationPresenter,
     ApplicationsStartPresenter {}
 
@@ -71,6 +77,7 @@ type Core = {
   retrieveApplications: ApplicationsRetrievalInteractor;
   retrieveApplicationLogs: ApplicationLogsRetrievalInteractor;
   createDeployment: DeploymentCreationInteractor;
+  retrieveApplicationDeployments: ApplicationDeploymentsRetrievalInteractor;
 };
 
 const createCore = (dependencies: Dependencies): Core => ({
@@ -109,6 +116,13 @@ const createCore = (dependencies: Dependencies): Core => ({
     dependencies.deploymentLog,
     dependencies.presenter
   ),
+  retrieveApplicationDeployments:
+    createApplicationDeploymentsRetrievalInteractor(
+      dependencies.deploymentLog,
+      dependencies.safeGuard,
+      dependencies.applicationRepository,
+      dependencies.presenter
+    ),
 });
 
 export {
