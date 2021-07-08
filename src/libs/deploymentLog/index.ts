@@ -13,7 +13,7 @@ const createDeploymentLog = (db: Db): DeploymentLog => ({
   tagDeployment: (application) =>
     db
       .collection("deployments")
-      .insertOne({ tag: createTag(), application })
+      .insertOne({ tag: createTag(), application, date: new Date() })
       .then(({ insertedId, ops: [{ _id, ...deployment }] }) => ({
         ...deployment,
         id: insertedId,
