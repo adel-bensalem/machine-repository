@@ -7,6 +7,7 @@ interface DeploymentLog {
   retrieveDeployments(
     application: Identifiable<Application>
   ): Promise<Identifiable<Deployment>[]>;
+  retrieveDeployment(tag: string): Promise<Identifiable<Deployment>>;
 }
 
 export { DeploymentLog };

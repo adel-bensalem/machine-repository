@@ -12,3 +12,4 @@ export * from "./applicationLogsRetrievalError";
 export * from "./deployment";
 export * from "./deploymentCreationError";
 export * from "./applicationDeploymentsRetrievalError";
+export * from "./applicationRollbackError";

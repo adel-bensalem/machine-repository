@@ -6,6 +6,7 @@ import { applicationsRetrievalRouter } from "./retrieveApplications";
 import { applicationLogsRetrievalRouter } from "./retrieveApplicationLogs";
 import { deploymentCreationRouter } from "./createDeployment";
 import { applicationDeploymentsRetrievalRouter } from "./retrieveApplicationDeployments";
+import { applicationRollbackRouter } from "./rollbackApplication";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use(applicationsRetrievalRouter);
 router.use(applicationLogsRetrievalRouter);
 router.use(deploymentCreationRouter);
 router.use(applicationDeploymentsRetrievalRouter);
+router.use(applicationRollbackRouter);
 
 export { router };

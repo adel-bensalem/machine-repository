@@ -29,6 +29,15 @@ const createDeploymentLog = (db: Db): DeploymentLog => ({
           id: _id,
         }))
       ),
+  retrieveDeployment: (tag: string) =>
+    new Promise((resolve, reject) =>
+      db
+        .collection("deployments")
+        .findOne({ tag: { $eq: tag } })
+        .then((deployment) =>
+          deployment ? resolve({ ...deployment, id: deployment._id }) : reject()
+        )
+    ),
 });
 
 export { createDeploymentLog };
