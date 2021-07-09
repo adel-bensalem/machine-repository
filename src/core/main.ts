@@ -9,6 +9,7 @@ import { ApplicationsRetrievalPresenter } from "./adapters/applicationsRetrieval
 import { ApplicationLogsRetrievalPresenter } from "./adapters/applicationLogsRetrievalPresenter";
 import { DeploymentCreationPresenter } from "./adapters/deploymentCreationPresenter";
 import { ApplicationDeploymentsRetrievalPresenter } from "./adapters/applicationDeploymentsRetrievalPresenter";
+import { ApplicationRollbackPresenter } from "./adapters/applicationRollbackPresenter";
 import { KeysVault } from "./adapters/keysVault";
 import { LogsCollector } from "./adapters/logsCollector";
 import { ApplicationDock } from "./adapters/applicationDock";
@@ -46,6 +47,10 @@ import {
   ApplicationDeploymentsRetrievalInteractor,
   createApplicationDeploymentsRetrievalInteractor,
 } from "./useCases/retrieveApplicationDeployments";
+import {
+  ApplicationRollbackInteractor,
+  createApplicationRollbackInteractor,
+} from "./useCases/rollbackApplication";
 
 interface Presenter
   extends ApplicationCreationPresenter,
@@ -55,6 +60,7 @@ interface Presenter
     ApplicationLogsRetrievalPresenter,
     ApplicationDeploymentsRetrievalPresenter,
     DeploymentCreationPresenter,
+    ApplicationRollbackPresenter,
     ApplicationsStartPresenter {}
 
 type Dependencies = {
@@ -78,6 +84,7 @@ type Core = {
   retrieveApplicationLogs: ApplicationLogsRetrievalInteractor;
   createDeployment: DeploymentCreationInteractor;
   retrieveApplicationDeployments: ApplicationDeploymentsRetrievalInteractor;
+  rollbackApplication: ApplicationRollbackInteractor;
 };
 
 const createCore = (dependencies: Dependencies): Core => ({
@@ -123,6 +130,13 @@ const createCore = (dependencies: Dependencies): Core => ({
       dependencies.applicationRepository,
       dependencies.presenter
     ),
+  rollbackApplication: createApplicationRollbackInteractor(
+    dependencies.safeGuard,
+    dependencies.applicationRepository,
+    dependencies.deploymentLog,
+    dependencies.applicationDock,
+    dependencies.presenter
+  ),
 });
 
 export {

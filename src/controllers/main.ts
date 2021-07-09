@@ -13,6 +13,7 @@ const createController = (core: Core, presenter: Presenter): Core => ({
   retrieveApplicationLogs: core.retrieveApplicationLogs,
   retrieveApplicationDeployments: core.retrieveApplicationDeployments,
   createDeployment: core.createDeployment,
+  rollbackApplication: core.rollbackApplication,
 });
 
 export { createController };
